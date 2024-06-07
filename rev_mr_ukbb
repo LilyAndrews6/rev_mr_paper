@@ -91,8 +91,18 @@ outcome_dat <- format_data( #read protein data as outcome
 exp <- read.table("~/decode_analysis/data/all_clumped_p1.txt", header=TRUE) #glioma data formatted for p1 threshold(r2=0.01, p-value=1x10-5)
 
 dat <- harmonise_data(exposure_dat = exp, outcome_dat = outcome_dat)
+
+#heterogeneity analysis
+if (dim(dat)[1]>0){
+het <- mr_heterogeneity(dat)
+print(het)
+loo <- mr_leaveoneout(dat)
+out <- paste0(x, "_loo_all_p1.txt")
+write.table(loo, file = out, row.names = F, quote = F, sep = "\t")
+
 if (dim(dat)[1] > 0){
     res <- generate_odds_ratios(mr(dat))
     out <- paste0("results",x, "_all_p1_rev_mr.txt")
     write.table(res, file = out, row.names = F, quote = F, sep = "\t")
-}}
+}}}
+
